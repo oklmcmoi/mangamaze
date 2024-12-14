@@ -29,7 +29,7 @@ export class PreloadScene extends Phaser.Scene {
         });
 
         // Chargement des assets
-        this.load.setBaseURL('');
+        this.load.setBaseURL('/');
         
         // Images
         this.load.image('tiles', 'assets/images/tileset.png');
@@ -38,12 +38,16 @@ export class PreloadScene extends Phaser.Scene {
         
         // Spritesheets
         this.load.spritesheet('player', 'assets/images/player.png', { 
-            frameWidth: 32, 
-            frameHeight: 32
+            frameWidth: 64, 
+            frameHeight: 32,
+            startFrame: 0,
+            endFrame: 1
         });
         this.load.spritesheet('ghost', 'assets/images/ghost.png', { 
-            frameWidth: 32, 
-            frameHeight: 32
+            frameWidth: 64, 
+            frameHeight: 32,
+            startFrame: 0,
+            endFrame: 1
         });
         
         // Map
