@@ -1,9 +1,10 @@
 import React, { useEffect } from 'react';
-import { Game } from '../game/config';
+import Phaser from 'phaser';
+import { gameConfig } from '../game/config';
 
 function App() {
     useEffect(() => {
-        const game = new Game();
+        const game = new Phaser.Game(gameConfig);
         
         // Cleanup on unmount
         return () => {
