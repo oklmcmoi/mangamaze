@@ -12,90 +12,68 @@ export class GameScene extends Phaser.Scene {
     }
 
     create() {
-        // Configuration du rendu graphique
-        this.cameras.main.setBackgroundColor('#000000');
-        this.lights.enable();
-        this.lights.setAmbientColor(0x555555);
-
-        // Création de la carte avec effets de profondeur
+        // Création de la carte
         const map = this.make.tilemap({ key: 'map' });
-        const tileset = map.addTilesetImage('tileset', 'tiles');
+        const tileset = map.addTilesetImage('tiles');
         
-        // Effet de parallaxe pour le fond
-        this.backgroundParallax = this.add.tileSprite(0, 0, this.cameras.main.width, this.cameras.main.height, 'game-background')
-            .setOrigin(0, 0)
-            .setScrollFactor(0.3, 0.3)
-            .setDepth(-1);
-
-        // Couches de la carte avec effets de profondeur
-        this.groundLayer = map.createLayer('Ground', tileset).setDepth(0);
-        this.decorLayer = map.createLayer('Decorations', tileset).setDepth(1);
-        this.wallsLayer = map.createLayer('Walls', tileset).setDepth(2);
+        // Création des couches
+        this.groundLayer = map.createLayer('Ground', tileset);
+        this.wallsLayer = map.createLayer('Walls', tileset);
         
-        // Ajout d'effets d'éclairage dynamique
-        this.wallsLayer.setPipeline('Light2D');
-        this.decorLayer.setPipeline('Light2D');
-
-        // Système de particules pour les effets ambiants
-        this.particlesAmbient = this.add.particles('particles');
-        this.particlesAmbient.createEmitter({
-            frame: 'blue',
-            x: { min: 0, max: this.cameras.main.width },
-            y: { min: 0, max: this.cameras.main.height },
-            lifespan: 2000,
+        // Configuration des collisions
+        this.wallsLayer.setCollisionByExclusion([-1]);
+        
+        // Création du joueur
+        const spawnPoint = { x: 48, y: 48 };
+        this.player = this.physics.add.sprite(spawnPoint.x, spawnPoint.y, 'player');
+        
+        // Configuration de la caméra
+        this.cameras.main.startFollow(this.player);
+        this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
+        
+        // Configuration des collisions entre le joueur et les murs
+        this.physics.add.collider(this.player, this.wallsLayer);
+        
+        // Configuration des contrôles
+        this.cursors = this.input.keyboard.createCursorKeys();
+        
+        // Ajout des particules
+        this.particles = this.add.particles('particles');
+        this.emitter = this.particles.createEmitter({
+            x: 0,
+            y: 0,
             speed: { min: 20, max: 50 },
             angle: { min: 0, max: 360 },
-            scale: { start: 0.1, end: 0 },
-            alpha: { start: 0.5, end: 0 },
+            scale: { start: 0.5, end: 0 },
             blendMode: 'ADD',
-            frequency: 200
+            lifespan: 500,
+            frequency: 50
         });
+        this.emitter.startFollow(this.player);
+    }
 
-        // Configuration des collisions avec effets visuels
-        this.wallsLayer.setCollisionByProperty({ collides: true });
-        
-        // Création du joueur avec animations améliorées
-        const character = this.registry.get('selectedCharacter') || 'naruto';
-        this.player = this.physics.add.sprite(48, 48, character);
-        this.player.setCollideWorldBounds(true);
-        this.player.setSize(28, 28);
-        
-        // Lumière suivant le joueur
-        this.playerLight = this.lights.addLight(this.player.x, this.player.y, 200, 0xffffff, 1);
+    update() {
+        if (!this.player) return;
 
-        // Effets de particules pour le mouvement du joueur
-        this.playerParticles = this.add.particles('particles');
-        this.playerTrail = this.playerParticles.createEmitter({
-            frame: 'blue',
-            follow: this.player,
-            frequency: 100,
-            speed: { min: 50, max: 100 },
-            scale: { start: 0.2, end: 0 },
-            alpha: { start: 0.4, end: 0 },
-            blendMode: 'ADD',
-            lifespan: 500
-        });
-        this.playerTrail.stop();
+        // Réinitialisation de la vélocité
+        this.player.setVelocity(0);
 
-        // Animations du joueur
-        this.createPlayerAnimations(character);
+        // Mouvement horizontal
+        if (this.cursors.left.isDown) {
+            this.player.setVelocityX(-200);
+        } else if (this.cursors.right.isDown) {
+            this.player.setVelocityX(200);
+        }
 
-        // Création des pastilles avec effets visuels
-        this.createEnhancedPellets();
+        // Mouvement vertical
+        if (this.cursors.up.isDown) {
+            this.player.setVelocityY(-200);
+        } else if (this.cursors.down.isDown) {
+            this.player.setVelocityY(200);
+        }
 
-        // Création des fantômes avec effets visuels améliorés
-        this.createEnhancedGhosts();
-
-        // Interface utilisateur améliorée
-        this.createEnhancedUI();
-
-        // Configuration de la caméra avec effets
-        this.cameras.main.startFollow(this.player);
-        this.cameras.main.setZoom(1.5);
-        this.cameras.main.fadeIn(1000);
-
-        // Post-processing effects
-        this.postFX = this.cameras.main.postFX.addBloom(0.5, 0.5, 0.5);
+        // Normalisation de la vitesse en diagonale
+        this.player.body.velocity.normalize().scale(200);
     }
 
     createPlayerAnimations(character) {
@@ -244,57 +222,6 @@ export class GameScene extends Phaser.Scene {
             });
             this.scoreText.setText(`Score: ${value}`);
         });
-    }
-
-    update() {
-        if (!this.player) return;
-
-        // Mise à jour des effets visuels
-        this.backgroundParallax.tilePositionX += 0.5;
-        this.backgroundParallax.tilePositionY += 0.2;
-        
-        // Mise à jour de la lumière du joueur
-        this.playerLight.x = this.player.x;
-        this.playerLight.y = this.player.y;
-
-        // Mouvement du joueur avec effets de particules
-        const speed = 160;
-        let velocityX = 0;
-        let velocityY = 0;
-        let isMoving = false;
-
-        if (this.cursors.left.isDown) {
-            velocityX = -speed;
-            this.player.play('walk-left', true);
-            isMoving = true;
-        } else if (this.cursors.right.isDown) {
-            velocityX = speed;
-            this.player.play('walk-right', true);
-            isMoving = true;
-        }
-
-        if (this.cursors.up.isDown) {
-            velocityY = -speed;
-            this.player.play('walk-up', true);
-            isMoving = true;
-        } else if (this.cursors.down.isDown) {
-            velocityY = speed;
-            this.player.play('walk-down', true);
-            isMoving = true;
-        }
-
-        // Activation/désactivation des particules de mouvement
-        if (isMoving) {
-            this.playerTrail.start();
-        } else {
-            this.playerTrail.stop();
-            this.player.stop();
-        }
-
-        this.player.setVelocity(velocityX, velocityY);
-
-        // Mise à jour des fantômes avec IA améliorée
-        this.updateGhosts();
     }
 
     updateGhosts() {

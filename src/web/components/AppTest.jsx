@@ -1,14 +1,19 @@
-import React from 'react';
-import { Game } from './Game';
+import React, { useEffect } from 'react';
+import { Game } from '../game/config';
 
-const App = () => {
+function App() {
+    useEffect(() => {
+        const game = new Game();
+        
+        // Cleanup on unmount
+        return () => {
+            game.destroy(true);
+        };
+    }, []);
+
     return (
-        <div className="app-container">
-            <div className="container-fluid p-0">
-                <Game />
-            </div>
-        </div>
+        <div id="game-container" style={{ width: '100vw', height: '100vh' }}></div>
     );
-};
+}
 
 export default App;

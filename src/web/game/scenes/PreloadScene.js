@@ -28,34 +28,22 @@ export class PreloadScene extends Phaser.Scene {
             progressBar.fillRect(250, 280, 300 * value, 30);
         });
 
-        // Chargement des assets HD
-        this.load.image('background', 'assets/images/background-hd.png');
-        this.load.image('tiles', 'assets/images/tileset-hd.png');
-        this.load.tilemapTiledJSON('map', 'assets/maps/level1-hd.json');
-        
-        // Sprites des personnages en HD
-        this.load.spritesheet('naruto', 'assets/sprites/naruto-hd.png', {
-            frameWidth: 64,
-            frameHeight: 64
-        });
-        this.load.spritesheet('naruto-power', 'assets/sprites/naruto-power-hd.png', {
-            frameWidth: 64,
-            frameHeight: 64
-        });
-        this.load.spritesheet('naruto-attack', 'assets/sprites/naruto-attack-hd.png', {
-            frameWidth: 64,
-            frameHeight: 64
-        });
+        // Chargement des assets
+        this.load.image('menu-background', 'assets/images/menu-background.png');
+        this.load.image('logo', 'assets/images/logo.png');
+        this.load.image('particles', 'assets/images/particles.png');
+        this.load.spritesheet('player', 'assets/images/player.png', { frameWidth: 32, frameHeight: 32 });
+        this.load.spritesheet('ghost', 'assets/images/ghost.png', { frameWidth: 32, frameHeight: 32 });
+        this.load.image('pellet', 'assets/images/pellet.png');
+        this.load.image('power-pellet', 'assets/images/power-pellet.png');
+        this.load.image('tiles', 'assets/images/tileset.png');
+        this.load.tilemapTiledJSON('map', 'assets/maps/level1.json');
 
-        // Effets visuels
-        this.load.image('particles', 'assets/effects/particles-hd.png');
-        this.load.image('powerup-effect', 'assets/effects/powerup-hd.png');
-        this.load.image('light', 'assets/effects/light-hd.png');
-
-        // Sons HD
-        this.load.audio('background-music', 'assets/audio/background-music-hd.mp3');
-        this.load.audio('powerup-sound', 'assets/audio/powerup-hd.mp3');
-        this.load.audio('collect-sound', 'assets/audio/collect-hd.mp3');
+        // Chargement des sons
+        this.load.audio('eat', 'assets/sounds/eat.mp3');
+        this.load.audio('power-up', 'assets/sounds/power-up.mp3');
+        this.load.audio('death', 'assets/sounds/death.mp3');
+        this.load.audio('background-music', 'assets/sounds/background-music.mp3');
     }
 
     create() {
