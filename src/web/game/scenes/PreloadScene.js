@@ -29,25 +29,46 @@ export class PreloadScene extends Phaser.Scene {
         });
 
         // Chargement des assets
-        this.load.image('menu-background', 'assets/images/menu-background.png');
-        this.load.image('logo', 'assets/images/logo.png');
-        this.load.image('particles', 'assets/images/particles.png');
-        this.load.spritesheet('player', 'assets/images/player.png', { frameWidth: 32, frameHeight: 32 });
-        this.load.spritesheet('ghost', 'assets/images/ghost.png', { frameWidth: 32, frameHeight: 32 });
-        this.load.image('pellet', 'assets/images/pellet.png');
-        this.load.image('power-pellet', 'assets/images/power-pellet.png');
-        this.load.image('tiles', 'assets/images/tileset.png');
-        this.load.tilemapTiledJSON('map', 'assets/maps/level1.json');
+        this.load.setBaseURL(window.location.origin);
+        
+        // Images
+        this.load.image('tiles', '/assets/images/tileset.png');
+        this.load.image('pellet', '/assets/images/pellet.png');
+        this.load.image('power-pellet', '/assets/images/power-pellet.png');
+        this.load.image('menu-background', '/assets/images/menu-background.png');
+        this.load.image('logo', '/assets/images/logo.png');
+        this.load.image('particles', '/assets/images/particles.png');
+        
+        // Spritesheets
+        this.load.spritesheet('player', '/assets/images/player.png', { 
+            frameWidth: 32, 
+            frameHeight: 32 
+        });
+        this.load.spritesheet('ghost', '/assets/images/ghost.png', { 
+            frameWidth: 32, 
+            frameHeight: 32 
+        });
+        
+        // Map
+        this.load.tilemapTiledJSON('map', '/assets/maps/level1.json');
 
         // Chargement des sons
-        this.load.audio('eat', 'assets/sounds/eat.mp3');
-        this.load.audio('power-up', 'assets/sounds/power-up.mp3');
-        this.load.audio('death', 'assets/sounds/death.mp3');
-        this.load.audio('background-music', 'assets/sounds/background-music.mp3');
+        this.load.audio('eat', '/assets/sounds/eat.mp3');
+        this.load.audio('power-up', '/assets/sounds/power-up.mp3');
+        this.load.audio('death', '/assets/sounds/death.mp3');
+        this.load.audio('background-music', '/assets/sounds/background-music.mp3');
     }
 
     create() {
-        // Transition vers la scène de menu
-        this.scene.start('MenuScene');
+        // Création des animations du joueur
+        this.anims.create({
+            key: 'player-idle',
+            frames: this.anims.generateFrameNumbers('player', { start: 0, end: 0 }),
+            frameRate: 10,
+            repeat: -1
+        });
+
+        // Transition vers la scène de jeu
+        this.scene.start('GameScene');
     }
 }
