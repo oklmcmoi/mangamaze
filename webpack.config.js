@@ -2,6 +2,7 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
 const Dotenv = require('dotenv-webpack');
+const webpack = require('webpack');
 
 module.exports = {
     entry: './src/web/index.js',
@@ -10,6 +11,15 @@ module.exports = {
         filename: 'bundle.[contenthash].js',
         clean: true,
         publicPath: '/'
+    },
+    resolve: {
+        extensions: ['.js', '.jsx'],
+        fallback: {
+            "buffer": require.resolve("buffer/"),
+            "stream": require.resolve("stream-browserify"),
+            "util": require.resolve("util/"),
+            "process": require.resolve("process/browser"),
+        }
     },
     module: {
         rules: [
@@ -33,10 +43,11 @@ module.exports = {
             }
         ]
     },
-    resolve: {
-        extensions: ['.js', '.jsx']
-    },
     plugins: [
+        new webpack.ProvidePlugin({
+            Buffer: ['buffer', 'Buffer'],
+            process: 'process/browser'
+        }),
         new HtmlWebpackPlugin({
             template: './src/web/index.html',
             filename: 'index.html'
