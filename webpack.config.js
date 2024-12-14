@@ -4,7 +4,7 @@ const CopyPlugin = require('copy-webpack-plugin');
 const Dotenv = require('dotenv-webpack');
 
 module.exports = {
-    entry: './src/web/components/App.jsx',
+    entry: './src/web/index.js',
     output: {
         path: path.resolve(__dirname, 'dist'),
         filename: 'bundle.[contenthash].js',

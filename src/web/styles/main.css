@@ -11,12 +11,21 @@
 body {
     margin: 0;
     padding: 0;
-    font-family: 'Roboto', sans-serif;
-    background-color: var(--background-color);
-    color: var(--text-color);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    background-color: #1a1a1a;
+    color: #ffffff;
 }
 
 /* Container principal */
+#root {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
 .app-container {
     min-height: 100vh;
 }
@@ -47,9 +56,11 @@ body {
 
 /* Jeu */
 .game-container {
+    width: 100%;
     max-width: 800px;
+    height: 600px;
     margin: 0 auto;
-    padding: 1rem;
+    position: relative;
 }
 
 .canvas-container {
@@ -60,6 +71,11 @@ body {
     background-color: var(--surface-color);
     border-radius: 8px;
     overflow: hidden;
+}
+
+canvas {
+    display: block;
+    margin: 0 auto;
 }
 
 /* Profil */
