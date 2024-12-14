@@ -16,5 +16,10 @@ export const gameConfig = {
             debug: true
         }
     },
-    scene: [PreloadScene, GameScene]
+    scene: [PreloadScene, GameScene],
+    scale: {
+        mode: Phaser.Scale.FIT,
+        autoCenter: Phaser.Scale.CENTER_BOTH
+    },
+    baseURL: 'https://mangamaze.netlify.app'
 };
