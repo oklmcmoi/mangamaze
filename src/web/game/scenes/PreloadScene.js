@@ -28,30 +28,32 @@ export class PreloadScene extends Phaser.Scene {
             progressBar.fillRect(250, 280, 300 * value, 30);
         });
 
+        // Debug handler pour les erreurs de chargement
+        this.load.on('loaderror', (file) => {
+            console.error('Error loading asset:', file.src);
+        });
+
         // Chargement des assets
-        this.load.setPath('/assets');
+        const assetPath = window.location.href.includes('localhost') ? '' : '/mangamaze';
+        this.load.setPath(assetPath);
         
         // Images
-        this.load.image('tiles', 'images/tileset.png');
-        this.load.image('pellet', 'images/pellet.png');
-        this.load.image('power-pellet', 'images/power-pellet.png');
+        this.load.image('tiles', 'assets/images/tileset.png');
+        this.load.image('pellet', 'assets/images/pellet.png');
+        this.load.image('power-pellet', 'assets/images/power-pellet.png');
         
         // Spritesheets
-        this.load.spritesheet('player', 'images/player.png', { 
+        this.load.spritesheet('player', 'assets/images/player.png', { 
             frameWidth: 64, 
-            frameHeight: 32,
-            startFrame: 0,
-            endFrame: 1
+            frameHeight: 32
         });
-        this.load.spritesheet('ghost', 'images/ghost.png', { 
+        this.load.spritesheet('ghost', 'assets/images/ghost.png', { 
             frameWidth: 64, 
-            frameHeight: 32,
-            startFrame: 0,
-            endFrame: 1
+            frameHeight: 32
         });
         
         // Map
-        this.load.tilemapTiledJSON('map', 'maps/level1.json');
+        this.load.tilemapTiledJSON('map', 'assets/maps/level1.json');
     }
 
     create() {
