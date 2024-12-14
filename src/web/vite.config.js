@@ -12,6 +12,16 @@ export default defineConfig({
       input: {
         main: resolve(__dirname, 'index.html'),
       },
+      output: {
+        assetFileNames: (assetInfo) => {
+          const info = assetInfo.name.split('.');
+          const ext = info[info.length - 1];
+          if (/png|jpe?g|svg|gif|tiff|bmp|ico/i.test(ext)) {
+            return `assets/images/[name][extname]`;
+          }
+          return `assets/[name]-[hash][extname]`;
+        },
+      },
     },
   },
   publicDir: 'public',
