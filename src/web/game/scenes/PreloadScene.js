@@ -28,34 +28,15 @@ export class PreloadScene extends Phaser.Scene {
             progressBar.fillRect(250, 280, 300 * value, 30);
         });
 
-        // Chargement des assets
-        this.load.setBaseURL(window.location.origin);
-        
-        // Images de base
-        this.load.image('tiles', '/assets/images/tileset.png');
-        this.load.image('pellet', '/assets/images/pellet.png');
-        this.load.image('power-pellet', '/assets/images/power-pellet.png');
-        
-        // Spritesheets
-        this.load.spritesheet('player', '/assets/images/player.png', { 
-            frameWidth: 32, 
-            frameHeight: 32,
-            startFrame: 0,
-            endFrame: 0
-        });
-        this.load.spritesheet('ghost', '/assets/images/ghost.png', { 
-            frameWidth: 32, 
-            frameHeight: 32,
-            startFrame: 0,
-            endFrame: 0
-        });
-        
-        // Map
-        this.load.tilemapTiledJSON('map', '/assets/maps/level1.json');
+        // Création d'une texture pour le mur
+        const graphics = this.add.graphics();
+        graphics.fillStyle(0x0000ff);
+        graphics.fillRect(0, 0, 32, 32);
+        graphics.generateTexture('wall', 32, 32);
+        graphics.destroy();
     }
 
     create() {
-        // Transition vers la scène de jeu
         this.scene.start('GameScene');
     }
 }

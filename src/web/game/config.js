@@ -1,7 +1,6 @@
 import Phaser from 'phaser';
-import { LoadingScene } from './scenes/LoadingScene';
-import { GameScene } from './scenes/GameScene';
 import { PreloadScene } from './scenes/PreloadScene';
+import { GameScene } from './scenes/GameScene';
 
 export const gameConfig = {
     type: Phaser.AUTO,
@@ -14,12 +13,8 @@ export const gameConfig = {
         default: 'arcade',
         arcade: {
             gravity: { y: 0 },
-            debug: false
+            debug: true
         }
-    },
-    scale: {
-        mode: Phaser.Scale.FIT,
-        autoCenter: Phaser.Scale.CENTER_BOTH
     },
     scene: [PreloadScene, GameScene]
 };
