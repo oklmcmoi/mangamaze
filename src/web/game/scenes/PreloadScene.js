@@ -15,7 +15,7 @@ export class PreloadScene extends Phaser.Scene {
         // Texte de chargement
         const width = this.cameras.main.width;
         const height = this.cameras.main.height;
-        const loadingText = this.add.text(width / 2, height / 2 - 50, 'Loading...', {
+        const loadingText = this.add.text(width / 2, height / 2 - 50, 'Loading MangaMaze...', {
             font: '20px Arial',
             fill: '#ffffff'
         });
@@ -28,15 +28,51 @@ export class PreloadScene extends Phaser.Scene {
             progressBar.fillRect(250, 280, 300 * value, 30);
         });
 
-        // Création d'une texture pour le mur
-        const graphics = this.add.graphics();
-        graphics.fillStyle(0x0000ff);
-        graphics.fillRect(0, 0, 32, 32);
-        graphics.generateTexture('wall', 32, 32);
-        graphics.destroy();
+        // Chargement des assets
+        this.load.setBaseURL('');
+        
+        // Images
+        this.load.image('tiles', 'assets/images/tileset.png');
+        this.load.image('pellet', 'assets/images/pellet.png');
+        this.load.image('power-pellet', 'assets/images/power-pellet.png');
+        
+        // Spritesheets
+        this.load.spritesheet('player', 'assets/images/player.png', { 
+            frameWidth: 32, 
+            frameHeight: 32
+        });
+        this.load.spritesheet('ghost', 'assets/images/ghost.png', { 
+            frameWidth: 32, 
+            frameHeight: 32
+        });
+        
+        // Map
+        this.load.tilemapTiledJSON('map', 'assets/maps/level1.json');
     }
 
     create() {
+        // Création des animations
+        this.createAnimations();
+        
+        // Transition vers la scène de jeu
         this.scene.start('GameScene');
+    }
+
+    createAnimations() {
+        // Animation du joueur
+        this.anims.create({
+            key: 'player-idle',
+            frames: this.anims.generateFrameNumbers('player', { start: 0, end: 1 }),
+            frameRate: 5,
+            repeat: -1
+        });
+
+        // Animation des fantômes
+        this.anims.create({
+            key: 'ghost-move',
+            frames: this.anims.generateFrameNumbers('ghost', { start: 0, end: 1 }),
+            frameRate: 5,
+            repeat: -1
+        });
     }
 }
